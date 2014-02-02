@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+
+  "name": "YSSY Upload Viewer",
+  "description": "YSSY Upload Viewer",
+  "version": "1.0",
+
+  "permissions": [
+    "https://bbs.sjtu.edu.cn/*"
+  ],
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://bbs.sjtu.edu.cn/*"],
+      "js": ["jquery-2.1.0.min.js", "viewer.js"]
+    }
+  ]
+}
