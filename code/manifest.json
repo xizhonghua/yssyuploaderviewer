@@ -3,14 +3,16 @@
 
   "name": "YSSY Upload Viewer",
   "description": "YSSY Upload Viewer",
-  "version": "1.0",
+  "version": "1.0.1",
 
   "permissions": [
     "https://bbs.sjtu.edu.cn/*"
   ],
-  "browser_action": {
-    "default_icon": "icon.png"
+  
+  "icons" : {
+  	"128": "icon.png"
   },
+  
   "content_scripts": [
     {
       "matches": ["https://bbs.sjtu.edu.cn/*"],
