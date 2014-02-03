@@ -6,7 +6,8 @@
   "version": "1.0.2",
 
   "permissions": [
-    "https://bbs.sjtu.edu.cn/*"
+    "https://bbs.sjtu.edu.cn/*",
+    "https://bbs.sjtu.cn/*"
   ],
   
   "icons" : {
@@ -17,8 +18,13 @@
   
   "content_scripts": [
     {
-      "matches": ["https://bbs.sjtu.edu.cn/*"],
-      "js": ["jquery-2.1.0.min.js", "options.js", "viewer.js"]
+      "matches": ["https://bbs.sjtu.edu.cn/*", "https://bbs.sjtu.cn/*"],
+      "js": ["jquery-2.1.0.min.js", "viewer.js"]
     }
-  ]
+  ],
+  
+  "background": {
+    "scripts": [ "options.js" ],
+    "persistent": true
+  }
 }
