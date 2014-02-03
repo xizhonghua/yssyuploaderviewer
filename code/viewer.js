@@ -1,11 +1,19 @@
 $(document).ready(function(){
 	if(!/https:\/\/bbs.sjtu.edu.cn\/bbsfdoc2/.test(document.location.href)) return;
 	
+	if(options.autoSize)
+		$('table').width($(window).width() - 40);
+	
 	$('td > a').each(function(){
 			var href = $(this).attr("href");
 			if(/jpeg$|jpg$|png$|gif$/.test(href.toLowerCase())){		
 				$("<br>").appendTo($(this).parent());
-				$("<img></img>").attr("src", href).appendTo($(this).parent());
+				var $img = $("<img></img>").attr("src", href);
+				if(options.autoSize) 
+					$img.load(function(){
+						if(this.width > $(window).width() - 360){ this.width =  $(window).width() - 360; };
+					});
+				$img.appendTo($(this).parent());
 			}
 	});
 	
