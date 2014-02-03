@@ -17,8 +17,8 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			var href = $(this).attr("href");
 			if(!/jpeg$|jpg$|png$|gif$/.test(href.toLowerCase())) return;
 					
-			$div = $('<div></div>').appendTo($(this).parent());
-			$a = $('<a href="' + href + '" target="_blank">').appendTo($div);
+			var $div = $('<div></div>').appendTo($(this).parent());
+			var $a = $('<a href="' + href + '" target="_blank">').appendTo($div);
 			var $img = $("<img></img>").attr("src", href);
 			if(options.autoSize) 
 				$img.load(function(){
