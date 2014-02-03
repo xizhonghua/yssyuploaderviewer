@@ -40,3 +40,8 @@ chrome.runtime.onMessage.addListener(
 		if (request.action == "setOption")
 			options.setVal(request.key, request.val);
 });
+
+chrome.runtime.onInstalled.addListener(function(details) {
+	if(details.reason == "update")
+		chrome.tabs.create({url: chrome.extension.getURL("options.html")})
+});
