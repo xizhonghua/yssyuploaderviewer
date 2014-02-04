@@ -3,7 +3,7 @@
 
   "name": "YSSY Upload Viewer",
   "description": "YSSY Upload Viewer",
-  "version": "1.0.5",
+  "version": "1.0.6",
 
   "permissions": [
     "https://bbs.sjtu.edu.cn/*",
@@ -19,7 +19,8 @@
   "content_scripts": [
     {
       "matches": ["https://bbs.sjtu.edu.cn/*", "https://bbs.sjtu.cn/*"],
-      "js": ["jquery-2.1.0.min.js", "viewer.js"]
+      "js": ["jquery-2.1.0.min.js", "viewer.js"],
+      "css": ["style.css"]
     }
   ],
   

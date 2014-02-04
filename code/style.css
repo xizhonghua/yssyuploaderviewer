@@ -31,3 +31,12 @@
 	background: #333;
 	color: #eee;
 }
+
+.hint {
+	position: fixed;
+    top: 2px;
+    right: 50%;
+  	background: #F7FABB;
+  	padding:10px;
+  	border-radius:10px;
+}
