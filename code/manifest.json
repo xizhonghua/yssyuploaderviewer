@@ -20,7 +20,8 @@
     {
       "matches": ["https://bbs.sjtu.edu.cn/*", "https://bbs.sjtu.cn/*"],
       "js": ["jquery-2.1.0.min.js", "viewer.js"],
-      "css": ["style.css"]
+      "css": ["style.css"],
+      "all_frames": true
     }
   ],
   
