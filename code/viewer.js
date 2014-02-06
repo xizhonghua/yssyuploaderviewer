@@ -23,9 +23,10 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 
 	function setBackgroundColor() {
 		var date = new Date();
-		var y = Math.round((1 - Math.abs(date.getHours() - 12)/12.0)*16);
+		var y = Math.round((1 - Math.abs(date.getHours() - 12)/12.0)*15);
 		var c = y.toString(16);
-		$("body").css({'background-color' : '#' + c + c + c});
+		var t = (15 - y).toString(16);
+		$("body").css({'background-color' : '#' + c + c + c, 'color' : '#' + t + t + t});
 	}
 	
 	function clickElement(ele) {
@@ -36,9 +37,10 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	
 	function scrollToImg() {
 		if(state.imgDivs.length == 0) return;
+		$hint.hide();
 		$('html, body').animate({
     		scrollTop: (state.imgDivs[state.currentImgIndex].first().offset().top)
-		}, 150);
+		}, 125);
 	}
 	
 	function nextPage() {
@@ -93,7 +95,7 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		}
 	}
 	
-	$(window).keydown(function(event){
+	$(window).keyup(function(event){
 		var ele, img;
 		switch(event.keyCode)
 		{	 
@@ -157,6 +159,8 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			if(!/jpeg$|jpg$|png$|gif$/.test(href.toLowerCase())) return;
 			
 			var $div = $('<div></div>').appendTo($(this).parent());
+			
+			state.imgDivs.push($div);
 				
 			if(options.centerImage) {
 				$div.addClass('img-wrapper').css({'height': state.windowHeight, 'width' : state.imgWrapperWidth})
@@ -166,8 +170,12 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			var $img = $("<img></img>").attr("src", href).appendTo($a);
 			if(options.autoSize) 
 				$img.css({'max-width' : state.imgWrapperWidth, 'max-height' : state.imgHeight});
+			if(options.hideTable) {
+				$img.css({'box-shadow' : '0 0 20px rgba(0, 0, 0, .8)'});
+			}
+				
 			$(this).remove();
-			state.imgDivs.push($div);
+			
 	});
 	
 	$("a:contains('上一页')").text("上一页 ← ");
