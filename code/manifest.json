@@ -3,7 +3,7 @@
 
   "name": "YSSY Upload Viewer",
   "description": "YSSY Upload Viewer",
-  "version": "1.1.4",
+  "version": "1.1.5",
 
   "permissions": [
     "https://bbs.sjtu.edu.cn/*",

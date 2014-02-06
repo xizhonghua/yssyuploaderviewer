@@ -7,9 +7,10 @@ Features
 
 *   Auto load images on the upload page
 *   Auto resize images to fit the window
-*   Hide irrelevant columns
+*   Hide irrelevant items
 *	Auto load next/previous page
 *	Shortcuts supported
+*	Progress bar
 
 Effect
 ------
