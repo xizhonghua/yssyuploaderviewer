@@ -1,6 +1,7 @@
 var defaultOptions = {
 	autoSize : true,
-	hideColumn : true
+	hideColumn : true,
+	centerImage : true
 };
 
 var options = {
@@ -41,7 +42,9 @@ chrome.runtime.onMessage.addListener(
 			options.setVal(request.key, request.val);
 });
 
-chrome.runtime.onInstalled.addListener(function(details) {
+chrome.runtime.onInstalled.addListener(function(details) { 
 	if(details.reason == "update")
-		chrome.tabs.create({url: chrome.extension.getURL("options.html")})
-});
+		chrome.tabs.create({
+			url: chrome.extension.getURL("options.html")});
+});	
+

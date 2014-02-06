@@ -14,4 +14,10 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			 action: 'setOption', key : 'hideColumn', val : $(this).prop('checked')
 		 });
 	 });
+	 
+	 $("#chk-center-image").prop('checked', options.centerImage).change(function(){
+		 chrome.runtime.sendMessage({
+			 action: 'setOption', key : 'centerImage', val : $(this).prop('checked')
+		 });
+	 });
 });

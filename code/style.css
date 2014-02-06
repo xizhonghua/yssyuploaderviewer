@@ -39,4 +39,10 @@
   	background: #F7FABB;
   	padding:10px;
   	border-radius:10px;
-}
+ }
+ 
+ .img-wrapper {
+ 	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+ }

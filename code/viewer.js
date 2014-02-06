@@ -6,8 +6,14 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		timeout : -1,
 		currentImgIndex : -1,
 		lastPrev : -1,
-		lastNext : -1
+		lastNext : -1,
+		windowHeight : $(window).height(),
+		windowWidth : $(window).width(),
+		imgDivs : [],
+		imgMargin : options.hideColumn ? 240 : 360,
 	};
+	
+	state.imgWrapperWidth = state.windowWidth - state.imgMargin;
 
 	function clickElement(ele) {
 		var e = document.createEvent('MouseEvents');
@@ -16,9 +22,9 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	}
 	
 	function scrollToImg() {
-		if(imgs.length == 0) return;
+		if(state.imgDivs.length == 0) return;
 		$('html, body').animate({
-    		scrollTop: (imgs[state.currentImgIndex].first().offset().top)
+    		scrollTop: (state.imgDivs[state.currentImgIndex].first().offset().top)
 		}, 150);
 	}
 	
@@ -60,7 +66,7 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	}
 	
 	function nextImg() {
-		if(state.currentImgIndex < imgs.length - 1) {
+		if(state.currentImgIndex < state.imgDivs.length - 1) {
 			state.currentImgIndex++;
 			scrollToImg();
 		} else {
@@ -120,26 +126,29 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		$('td:nth-child(7)').hide();
 	}
 	
-	var imgMargin = options.hideColumn ? 240 : 360;
-	
-	var imgs = [];
-	
-	
 	$('td > a').each(function(){
 			var href = $(this).attr("href");
 			if(!/jpeg$|jpg$|png$|gif$/.test(href.toLowerCase())) return;
 			
 			var $div = $('<div></div>').appendTo($(this).parent());
+				
+			if(options.centerImage) {
+				$div.addClass('img-wrapper').css({'height': state.windowHeight, 'width' : state.imgWrapperWidth})
+			}
+				
 			var $a = $('<a href="' + href + '" target="_blank">').appendTo($div);
 			var $img = $("<img></img>").attr("src", href).appendTo($a);
 			if(options.autoSize) 
-				$img.css({'max-width' : $(window).width() - imgMargin, 'max-height' : $(window).height()});
+				$img.css({'max-width' : state.imgWrapperWidth, 'max-height' : state.windowHeight});
 			$(this).remove();
-			imgs.push($img);
+			state.imgDivs.push($div);
 	});
 	
 	$("a:contains('上一页')").text("上一页 ← ");
 	$("a:contains('下一页')").text("下一页 → ");
 	
+	if(state.imgDivs.length > 0) {
+		nextImg();
+	}
 	
 });
