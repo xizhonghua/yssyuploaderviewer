@@ -10,11 +10,24 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		windowHeight : $(window).height(),
 		windowWidth : $(window).width(),
 		imgDivs : [],
-		imgMargin : options.hideColumn ? 240 : 360,
+		imgRightMargin : options.hideColumn ? 240 : 360,
+		imgTopDownMargin : 8
 	};
 	
-	state.imgWrapperWidth = state.windowWidth - state.imgMargin;
+	if(options.hideTable)
+		state.imgRightMargin = 40;
+		
+	state.imgWrapperWidth = state.windowWidth - state.imgRightMargin;
+	state.imgHeight = state.windowHeight - 2*state.imgTopDownMargin;
 
+
+	function setBackgroundColor() {
+		var date = new Date();
+		var y = Math.round((1 - Math.abs(date.getHours() - 12)/12.0)*16);
+		var c = y.toString(16);
+		$("body").css({'background-color' : '#' + c + c + c});
+	}
+	
 	function clickElement(ele) {
 		var e = document.createEvent('MouseEvents');
 		e.initEvent('click', true, true );
@@ -118,12 +131,25 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	if(options.autoSize)
 		$('table').width($(window).width() - 60);
 	
+	function hideColumns(cols) {
+		for(var i=0;i<cols.length;i++)
+			$('td:nth-child(' + cols[i] + ')').hide();
+	}
+	
+	function hideRows(rows) {
+		for(var i=0;i<rows.length;i++)
+			$('tr:nth-child(' + rows[i] + ')').hide();
+	}
+	
 	if(options.hideColumn)
 	{
-		$('td:nth-child(1)').hide();
-		$('td:nth-child(5)').hide();
-		$('td:nth-child(6)').hide();
-		$('td:nth-child(7)').hide();
+		hideColumns([1,5,6,7]);
+	}
+	
+	if(options.hideTable) {
+		hideRows([1]);
+		hideColumns([1,3,4,5,6,7,8,9]);	
+		$('table').attr('border', '0');
 	}
 	
 	$('td > a').each(function(){
@@ -139,7 +165,7 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			var $a = $('<a href="' + href + '" target="_blank">').appendTo($div);
 			var $img = $("<img></img>").attr("src", href).appendTo($a);
 			if(options.autoSize) 
-				$img.css({'max-width' : state.imgWrapperWidth, 'max-height' : state.windowHeight});
+				$img.css({'max-width' : state.imgWrapperWidth, 'max-height' : state.imgHeight});
 			$(this).remove();
 			state.imgDivs.push($div);
 	});
@@ -151,4 +177,7 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		nextImg();
 	}
 	
+	if(options.hideTable) {
+		setBackgroundColor();
+	}
 });

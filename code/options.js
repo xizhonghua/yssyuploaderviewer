@@ -1,7 +1,8 @@
 var defaultOptions = {
 	autoSize : true,
+	centerImage : true,
 	hideColumn : true,
-	centerImage : true
+	hideTable : true
 };
 
 var options = {

@@ -8,16 +8,22 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			 action: 'setOption', key : 'autoSize', val : $(this).prop('checked')
 		 });
 	 });
-
-	 $("#chk-hide-column").prop('checked', options.hideColumn).change(function(){
+	 
+	 $("#chk-center-image").prop('checked', options.centerImage).change(function(){
+		 chrome.runtime.sendMessage({
+			 action: 'setOption', key : 'centerImage', val : $(this).prop('checked')
+		 });
+	 });
+	 
+	  $("#chk-hide-column").prop('checked', options.hideColumn).change(function(){
 		 chrome.runtime.sendMessage({
 			 action: 'setOption', key : 'hideColumn', val : $(this).prop('checked')
 		 });
 	 });
 	 
-	 $("#chk-center-image").prop('checked', options.centerImage).change(function(){
+	  $("#chk-hide-table").prop('checked', options.hideTable).change(function(){
 		 chrome.runtime.sendMessage({
-			 action: 'setOption', key : 'centerImage', val : $(this).prop('checked')
+			 action: 'setOption', key : 'hideTable', val : $(this).prop('checked')
 		 });
 	 });
 });
