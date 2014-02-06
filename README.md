@@ -6,10 +6,20 @@ Features
 --------
 
 *   Auto load images on the upload page
-*    Auto resize images to fit the window
-*	Hide irrelevant columns
+*   Auto resize images to fit the window
+*   Hide irrelevant columns
 *	Auto load next/previous page
 *	Shortcuts supported
+
+Effect
+------
+Before
+![](https://raw2.github.com/xizhonghua/yssyuploaderviewer/master/store/before.png)
+
+After
+![](https://raw2.github.com/xizhonghua/yssyuploaderviewer/master/store/after.png)
+
+
 
 Install
 -------
