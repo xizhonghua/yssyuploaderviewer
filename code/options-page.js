@@ -26,4 +26,10 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			 action: 'setOption', key : 'hideTable', val : $(this).prop('checked')
 		 });
 	 });
+	 
+	 $("#chk-progress-bar").prop('checked', options.progressBar).change(function(){
+		 chrome.runtime.sendMessage({
+			 action: 'setOption', key : 'progressBar', val : $(this).prop('checked')
+		 });
+	 });
 });

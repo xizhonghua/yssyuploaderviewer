@@ -1,7 +1,5 @@
 $("body").hide();
 chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
-	//if(!/https:\/\/bbs\.sjtu\.edu\.cn\/bbsfdoc2\?/.test(window.location.href)
-	//&& !/https:\/\/bbs\.sjtu\.cn\/bbsfdoc2\?/.test(window.location.href)) return;
 
 	var state  = {
 		inited : false,
@@ -14,6 +12,8 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		imgDivs : [],
 		imgRightMargin : options.hideColumn ? 240 : 360,
 		imgTopDownMargin : 20,
+		scrolling : false,
+		scrollingIndex : -1
 	};
 	
 	if(options.hideTable)
@@ -37,12 +37,29 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		ele.dispatchEvent(e);
 	}
 	
+	function updateProgressBar() {
+		if(!options.progressBar) return;
+		var percentage = (state.currentImgIndex + 1) * 100.0 / state.imgDivs.length;
+		state.$progressBar.show().animate({'width' : percentage + '%'}, 125);
+	}
+	
 	function scrollToImg(immediate) {
 		if(state.imgDivs.length == 0) return;
 		$hint.hide();
-		$('html, body').animate({
-    		scrollTop: (state.imgDivs[state.currentImgIndex].first().offset().top)
-		}, immediate ? 0 : 125);
+		updateProgressBar();
+		state.scrolling = true;
+		state.scrollingIndex = state.currentImgIndex;
+		
+		var doScroll = function(index) {
+			$('html, body').animate({
+				scrollTop: (state.imgDivs[index].first().offset().top)
+			}, immediate ? 0 : 125, "swing", function(){
+				if(index == state.scrollingIndex)
+					state.scrolling = false;
+			});
+		}
+		
+		doScroll(state.scrollingIndex);
 	}
 	
 	function nextPage() {
@@ -97,30 +114,7 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		}
 	}
 	
-	$(window).keyup(function(event){
-		if(!state.inited) return;
-		var ele, img;
-		switch(event.keyCode)
-		{	 
-			case 37:	// <- : previous page
-			case 72:	// h  : previous page
-				prevPage();
-				break;
-			case 39:	// -> : next page
-			case 76:	// l  : next page
-				nextPage();
-				break;
-			case 75:	// k : previous image
-				prevImg();
-				break;
-			case 74:	// j : next image
-				nextImg();
-				break;
-			case 84:	// t : test
-				showHint('testing...');
-				break;
-		}
-	});
+	
 	
 	function showHint(msg) {
 		$hint.html(msg).css({'margin-right' : -$hint.width()/2 + 'px'}).show();
@@ -155,6 +149,7 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		hideRows([1]);
 		hideColumns([1,3,4,5,6,7,8,9]);	
 		$('table').attr('border', '0');
+		state.$progressBar = $('<div></div>').addClass('progress-bar').appendTo($("body"));
 	}
 	
 	$('td > a').each(function(){
@@ -179,6 +174,49 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 				
 			$(this).remove();
 			
+	});
+	
+	$(window).keyup(function(event){
+		if(!state.inited) return;
+		var ele, img;
+		switch(event.keyCode)
+		{	 
+			case 37:	// <- : previous page
+			case 72:	// h  : previous page
+				prevPage();
+				break;
+			case 39:	// -> : next page
+			case 76:	// l  : next page
+				nextPage();
+				break;
+			case 75:	// k : previous image
+				prevImg();
+				break;
+			case 74:	// j : next image
+				nextImg();
+				break;
+			case 84:	// t : test
+				showHint('testing...');
+				break;
+		}
+	});
+	
+	$(window).scroll(function(event){
+		if(state.scrolling) return;
+		
+		var top = $(this).scrollTop();
+		var index = -1;
+		for(var i=0;i<state.imgDivs.length;i++)
+		{
+			var imgBottom = state.imgDivs[i].position().top + state.imgDivs[i].outerHeight(true);
+			if(top > imgBottom) { index = i; }
+		}
+		
+		if(state.currentImgIndex != index+1)
+		{
+			state.currentImgIndex = index+1;
+			updateProgressBar();
+		}
 	});
 	
 	$("a:contains('上一页')").text("上一页 ← ");

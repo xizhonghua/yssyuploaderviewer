@@ -2,7 +2,8 @@ var defaultOptions = {
 	autoSize : true,
 	centerImage : true,
 	hideColumn : true,
-	hideTable : true
+	hideTable : true,
+	progressBar : true
 };
 
 var options = {

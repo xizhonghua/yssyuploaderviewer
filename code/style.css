@@ -34,12 +34,25 @@
 
 .hint {
 	position: fixed;
-    top: 2px;
+    top: 4px;
     right: 50%;
   	background: #F7FABB;
   	padding:10px;
   	border-radius:10px;
   	color:#333;
+  	z-index: 1000;
+ }
+ 
+ .progress-bar {
+ 	position: fixed;
+    top: 0px;
+    left: 0px;
+  	background: #014DA2;
+  	width:0%;
+  	height:3px;
+  	box-shadow: 0 0 4px rgba(0, 0, 0, .8);
+	display: none;
+	z-index: 999;
  }
  
  .img-wrapper {
