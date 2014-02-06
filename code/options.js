@@ -30,10 +30,13 @@ var options = {
 		   }
 	   }
 	   return this;
+	},
+	init : function() {
+		options.load().updateWith(defaultOptions).save();		
 	}
 };
 
-options.load().updateWith(defaultOptions).save();
+options.init();
 
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
@@ -44,8 +47,9 @@ chrome.runtime.onMessage.addListener(
 });
 
 chrome.runtime.onInstalled.addListener(function(details) { 
-	if(details.reason == "update")
-		chrome.tabs.create({
-			url: chrome.extension.getURL("options.html")});
+	if(details.reason == "update") {
+		options.init()
+		chrome.tabs.create({url: chrome.extension.getURL("options.html")});
+	}
 });	
 

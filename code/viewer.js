@@ -1,8 +1,10 @@
+$("body").hide();
 chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
-	if(!/https:\/\/bbs\.sjtu\.edu\.cn\/bbsfdoc2\?/.test(window.location.href)
-	&& !/https:\/\/bbs\.sjtu\.cn\/bbsfdoc2\?/.test(window.location.href)) return;
+	//if(!/https:\/\/bbs\.sjtu\.edu\.cn\/bbsfdoc2\?/.test(window.location.href)
+	//&& !/https:\/\/bbs\.sjtu\.cn\/bbsfdoc2\?/.test(window.location.href)) return;
 
 	var state  = {
+		inited : false,
 		timeout : -1,
 		currentImgIndex : -1,
 		lastPrev : -1,
@@ -11,7 +13,7 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		windowWidth : $(window).width(),
 		imgDivs : [],
 		imgRightMargin : options.hideColumn ? 240 : 360,
-		imgTopDownMargin : 8
+		imgTopDownMargin : 20,
 	};
 	
 	if(options.hideTable)
@@ -35,12 +37,12 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		ele.dispatchEvent(e);
 	}
 	
-	function scrollToImg() {
+	function scrollToImg(immediate) {
 		if(state.imgDivs.length == 0) return;
 		$hint.hide();
 		$('html, body').animate({
     		scrollTop: (state.imgDivs[state.currentImgIndex].first().offset().top)
-		}, 125);
+		}, immediate ? 0 : 125);
 	}
 	
 	function nextPage() {
@@ -80,10 +82,10 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		}
 	}
 	
-	function nextImg() {
+	function nextImg(immediate) {
 		if(state.currentImgIndex < state.imgDivs.length - 1) {
 			state.currentImgIndex++;
-			scrollToImg();
+			scrollToImg(immediate);
 		} else {
 			var n = new Date().getTime();
 			if(n - state.lastNext < 2000) {
@@ -96,6 +98,7 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	}
 	
 	$(window).keyup(function(event){
+		if(!state.inited) return;
 		var ele, img;
 		switch(event.keyCode)
 		{	 
@@ -181,11 +184,15 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	$("a:contains('上一页')").text("上一页 ← ");
 	$("a:contains('下一页')").text("下一页 → ");
 	
+	
+	state.inited = true;
+	$("body").show();
+		
 	if(state.imgDivs.length > 0) {
-		nextImg();
+		nextImg(true);
 	}
 	
 	if(options.hideTable) {
 		setBackgroundColor();
-	}
+	}	
 });
