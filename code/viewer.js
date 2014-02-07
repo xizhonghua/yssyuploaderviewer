@@ -26,7 +26,7 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	if(options.reverseOrder) {
 		var trs = [];
 		$("tr").each(function(index){ if(index != 0) trs.push($(this));});
-		for(var i=trs.length-1;i>=0;i--) { $("table").append(trs[i]); }
+ 		for(var i=trs.length-1;i>=0;i--) { $("table").append(trs[i]); }
     }
 
 	function setBackgroundColor() {
@@ -72,10 +72,10 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		var ele = $("a:contains('下一页')")[0];
 		if(ele) {
 			clickElement(ele);
-			showHint('Loading next page...');
+			showHint('Loading newer ones...', 256*256);
 		}
 		else {
-			showHint('No more pages...');
+			showHint('No newer ones...');
 		}
 	}
 	
@@ -83,10 +83,10 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 		var ele = $("a:contains('上一页')")[0];
 		if(ele) {
 			clickElement(ele);
-			showHint('Loading previous page...');
+			showHint('Loading older ones...', 256*256);
 		}
 		else {
-			showHint('No more pages...');
+			showHint('No older ones...');
 		}
 	}
 	
@@ -96,10 +96,10 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			scrollToImg();
 		} else {
 			var n = new Date().getTime();
-			if(n - state.lastPrev < 2000) {
+			if(n - state.lastPrev < 2000 && n - state.lastPrev > 250) {
 				nextPage();
 			} else {
-				showHint("Press K to load more...");
+				showHint("Press K to load newer ones...");
 			}
 			state.lastPrev = n;
 		}
@@ -111,10 +111,10 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			scrollToImg(immediate);
 		} else {
 			var n = new Date().getTime();
-			if(n - state.lastNext < 2000) {
+			if(n - state.lastNext < 2000 && n - state.lastPrev > 250) {
 				prevPage();
 			} else {
-				showHint("Press J to load more...");
+				showHint("Press J to load older ones...");
 			}
 			state.lastNext = n;
 		}
@@ -122,12 +122,12 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	
 	
 	
-	function showHint(msg) {
+	function showHint(msg, duration) {
 		$hint.html(msg).css({'margin-right' : -$hint.width()/2 + 'px'}).show();
 		clearTimeout(state.timeout);
 		state.timeout = setTimeout(function() {
 			$hint.slideUp();
-		}, 2000);
+		}, duration ? duration : 2000);
 	}
 	
 	
