@@ -210,8 +210,18 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			
 	});
 	
+	function goToImg() {
+		$("#input-start").focus();
+	}
+	
+	function goToBoard() {
+		$("#input-board").focus();
+	}
+	
 	$(window).keyup(function(event){
 		if(!state.inited) return;
+		if(event.target.nodeName == 'INPUT') return;
+		
 		var ele, img;
 		switch(event.keyCode)
 		{	 
@@ -228,6 +238,12 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 				break;
 			case 74:	// j : next image
 				nextImg();
+				break;
+			case 71:	// g : goto image
+				goToImg();
+				break;
+			case 66:	// b : goto board
+				goToBoard();
 				break;
 			case 84:	// t : test
 				//toggleTable();
@@ -264,8 +280,15 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	
 	
 	$("body").show();
+	
+	var file = chrome.extension.getURL("form-board.html");
+	
+	$.get(file, function(data) {
+		$(data).insertBefore("table");
 		
-	if(state.imgDivs.length > 0) {
-		nextImg(true);
-	}
+		if(state.imgDivs.length > 0) {
+			nextImg(true);
+		}
+	});
+	
 });

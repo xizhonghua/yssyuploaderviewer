@@ -3,7 +3,7 @@
 
   "name": "YSSY Upload Viewer",
   "description": "YSSY Upload Viewer",
-  "version": "1.1.7",
+  "version": "1.1.8",
 
   "permissions": [
     "https://bbs.sjtu.edu.cn/*",
@@ -28,5 +28,10 @@
   "background": {
     "scripts": [ "jquery-2.1.0.min.js", "options.js" ],
     "persistent": true
-  }
+  },
+  
+  "web_accessible_resources": [
+  	"manifest.json",
+  	"form-board.html"
+  ]
 }

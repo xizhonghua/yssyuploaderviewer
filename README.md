@@ -34,6 +34,8 @@ Shortcuts
 *   K : Previous image
 *   L : Next page
 *   H : Previous page
+*   G : Goto item
+*   B : Goto board
 
 Contact
 -------
