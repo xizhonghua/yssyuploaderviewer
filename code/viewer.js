@@ -1,6 +1,5 @@
 $("body").hide();
 chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
-
 	var state  = {
 		inited : false,
 		timeout : -1,
@@ -22,12 +21,19 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	state.imgWrapperWidth = state.windowWidth - state.imgRightMargin;
 	state.imgHeight = state.windowHeight - 2*state.imgTopDownMargin;
 
+	state.$progressBar = $('<div></div>').addClass('progress-bar').appendTo($("body"));
+
+	if(options.reverseOrder) {
+		var trs = [];
+		$("tr").each(function(index){ if(index != 0) trs.push($(this));});
+		for(var i=trs.length-1;i>=0;i--) { $("table").append(trs[i]); }
+    }
 
 	function setBackgroundColor() {
 		var date = new Date();
 		var y = Math.round((1 - Math.abs(date.getHours() - 12)/12.0)*15);
 		var c = y.toString(16);
-		var t = (15 - y).toString(16);
+		var t = (y > 7 ? 0 : 15).toString(16);
 		$("body").css({'background-color' : '#' + c + c + c, 'color' : '#' + t + t + t});
 	}
 	
@@ -130,27 +136,55 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	if(options.autoSize)
 		$('table').width($(window).width() - 60);
 	
+	
+	function showColumns(cols) {
+		for(var i=0;i<cols.length;i++)
+			$('td:nth-child(' + cols[i] + ')').show();
+	}
+	
 	function hideColumns(cols) {
 		for(var i=0;i<cols.length;i++)
 			$('td:nth-child(' + cols[i] + ')').hide();
 	}
+	
+	function showRows(rows) {
+		for(var i=0;i<rows.length;i++)
+			$('tr:nth-child(' + rows[i] + ')').show();
+	}
+
 	
 	function hideRows(rows) {
 		for(var i=0;i<rows.length;i++)
 			$('tr:nth-child(' + rows[i] + ')').hide();
 	}
 	
-	if(options.hideColumn)
-	{
-		hideColumns([1,5,6,7]);
+	function toggleColumn() {
+		var cols = [1,5,6,7];
+		if(options.hideColumn)
+		{
+			hideColumns(cols);
+		} else {
+			showColumns(cols);
+		}
 	}
 	
-	if(options.hideTable) {
-		hideRows([1]);
-		hideColumns([1,3,4,5,6,7,8,9]);	
-		$('table').attr('border', '0');
-		state.$progressBar = $('<div></div>').addClass('progress-bar').appendTo($("body"));
+	function toggleTable() {
+		var rows = [1];
+		var cols = [1,3,4,5,6,7,8,9];
+		if(options.hideTable) {
+			hideRows(rows);
+			hideColumns(cols);	
+			$('table').attr('old-border', $('table').attr('border')).attr('border', '0');
+			setBackgroundColor();
+		} else {
+			showRows(rows);
+			showColumns(cols);	
+			var oldBorder = $('table').attr('old-border');
+			if(oldBorder) $('table').attr('border', oldBorder);
+		}
 	}
+	
+	
 	
 	$('td > a').each(function(){
 			var href = $(this).attr("href");
@@ -196,7 +230,7 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 				nextImg();
 				break;
 			case 84:	// t : test
-				showHint('testing...');
+				//toggleTable();
 				break;
 		}
 	});
@@ -224,13 +258,14 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 	
 	
 	state.inited = true;
+	
+	toggleColumn();
+	toggleTable();
+	
+	
 	$("body").show();
 		
 	if(state.imgDivs.length > 0) {
 		nextImg(true);
 	}
-	
-	if(options.hideTable) {
-		setBackgroundColor();
-	}	
 });

@@ -3,7 +3,8 @@ var defaultOptions = {
 	centerImage : true,
 	hideColumn : true,
 	hideTable : true,
-	progressBar : true
+	progressBar : true,
+	reverseOrder : true
 };
 
 var options = {

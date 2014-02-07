@@ -32,4 +32,10 @@ chrome.runtime.sendMessage({action: "getOptions"}, function(options) {
 			 action: 'setOption', key : 'progressBar', val : $(this).prop('checked')
 		 });
 	 });
+	 
+    $("#chk-reverse-order").prop('checked', options.reverseOrder).change(function(){
+		 chrome.runtime.sendMessage({
+			 action: 'setOption', key : 'reverseOrder', val : $(this).prop('checked')
+		 });
+	 });
 });
