@@ -15,10 +15,10 @@ Features
 Effect
 ------
 Before
-![](https://raw2.github.com/xizhonghua/yssyuploaderviewer/master/store/before.png)
+![](https://raw.githubusercontent.com/xizhonghua/yssyuploaderviewer/master/store/before.png)
 
 After
-![](https://raw2.github.com/xizhonghua/yssyuploaderviewer/master/store/after.png)
+![](https://raw.githubusercontent.com/xizhonghua/yssyuploaderviewer/master/store/after.png)
 
 
 
